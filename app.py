@@ -4,7 +4,7 @@ import json
 import os
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*", "methods": ["GET", "POST", "DELETE"]}})
 
 DATA_FILE = "ingredients.json"
 
@@ -13,31 +13,47 @@ if not os.path.exists(DATA_FILE):
     with open(DATA_FILE, "w") as f:
         json.dump([], f)
 
-# 材料を取得するAPI
-@app.route("/ingredients", methods=["GET"])
-def get_ingredients():
-    with open(DATA_FILE, "r") as f:
-        ingredients = json.load(f)
-    return jsonify(ingredients)
+@app.route("/ingredients", methods=["GET", "POST", "DELETE"])
+def manage_ingredients():
+    if request.method == "GET":
+        with open(DATA_FILE, "r") as f:
+            ingredients = json.load(f)
+        return jsonify(ingredients)
 
-# 材料を追加するAPI
-@app.route("/ingredients", methods=["POST"])
-def add_ingredient():
-    data = request.json
-    ingredient = data.get("name")
+    elif request.method == "POST":
+        data = request.json
+        ingredient = data.get("name")
+        if not ingredient:
+            return jsonify({"error": "材料名が必要です"}), 400
 
-    if not ingredient:
-        return jsonify({"error": "材料名が必要です"}), 400
+        with open(DATA_FILE, "r") as f:
+            ingredients = json.load(f)
 
-    with open(DATA_FILE, "r") as f:
-        ingredients = json.load(f)
+        ingredients.append({"name": ingredient})
 
-    ingredients.append({"name": ingredient})
+        with open(DATA_FILE, "w") as f:
+            json.dump(ingredients, f, indent=4)
 
-    with open(DATA_FILE, "w") as f:
-        json.dump(ingredients, f, indent=4)
+        return jsonify({"message": "材料を追加しました", "ingredients": ingredients})
 
-    return jsonify({"message": "材料を追加しました", "ingredients": ingredients})
+    elif request.method == "DELETE":
+        data = request.json
+        ingredient_to_delete = data.get("name")
+
+        if not ingredient_to_delete:
+            return jsonify({"error": "削除する材料名が必要です"}), 400
+
+        with open(DATA_FILE, "r") as f:
+            ingredients = json.load(f)
+
+        # 材料を削除
+        ingredients = [item for item in ingredients if item["name"] != ingredient_to_delete]
+
+        with open(DATA_FILE, "w") as f:
+            json.dump(ingredients, f, indent=4)
+
+        return jsonify({"message": "材料を削除しました", "ingredients": ingredients})
+
 
 if __name__ == "__main__":
     app.run(debug=True)
@@ -69,22 +85,3 @@ def generate_menu():
     
     return jsonify({"menu": menu})
 
-# 材料を削除するAPI
-@app.route("/ingredients", methods=["DELETE"])
-def delete_ingredient():
-    data = request.json
-    ingredient_to_delete = data.get("name")
-
-    if not ingredient_to_delete:
-        return jsonify({"error": "削除する材料名が必要です"}), 400
-
-    with open(DATA_FILE, "r") as f:
-        ingredients = json.load(f)
-
-    # 材料を削除
-    ingredients = [item for item in ingredients if item["name"] != ingredient_to_delete]
-
-    with open(DATA_FILE, "w") as f:
-        json.dump(ingredients, f, indent=4)
-
-    return jsonify({"message": "材料を削除しました", "ingredients": ingredients})

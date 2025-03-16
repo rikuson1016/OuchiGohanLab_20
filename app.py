@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS
+from flask_cors import CORS  # CORSを扱うためのライブラリをインポート
 import json
 import os
 import openai
@@ -12,42 +12,61 @@ load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 app = Flask(__name__)
-CORS(app)  # すべてのオリジン・メソッドを許可
+
+# CORS設定（特定のオリジンを許可）
+CORS(app, resources={r"/*": {"origins": "http://localhost:5173", "methods": ["GET", "POST", "DELETE"]}})
 
 DATA_FILE = "ingredients.json"
 
-# 初回起動時にJSONファイルを作成
-if not os.path.exists(DATA_FILE):
-    with open(DATA_FILE, "w") as f:
-        json.dump([], f)
-
-# 材料の管理（取得, 追加, 削除）
-@app.route("/ingredients", methods=["GET", "POST", "DELETE"])
-def manage_ingredients():
+# ✅ JSONファイルの読み込み関数
+def load_ingredients():
+    if not os.path.exists(DATA_FILE):
+        return []
     with open(DATA_FILE, "r") as f:
-        ingredients = json.load(f)
+        return json.load(f)
 
-    if request.method == "GET":
-        return jsonify(ingredients)
-
-    data = request.json
-    ingredient_name = data.get("name")
-
-    if not ingredient_name:
-        return jsonify({"error": "材料名が必要です"}), 400
-
-    if request.method == "POST":
-        ingredients.append({"name": ingredient_name})
-
-    elif request.method == "DELETE":
-        ingredients = [item for item in ingredients if item["name"] != ingredient_name]
-
+# ✅ JSONファイルへの書き込み関数
+def save_ingredients(ingredients):
     with open(DATA_FILE, "w") as f:
         json.dump(ingredients, f, indent=4)
 
-    return jsonify({"message": "処理が完了しました", "ingredients": ingredients})
+# "/ingredients" エンドポイント（GET, POST, DELETEに対応）
+@app.route("/ingredients", methods=["GET", "POST", "DELETE"])
+def manage_ingredients():
+    try:
+        if request.method == "GET":
+            return jsonify(load_ingredients())
 
-# AIで献立を生成
+        elif request.method == "POST":
+            data = request.json
+            ingredient = data.get("name")
+            if not ingredient:
+                return jsonify({"error": "材料名が必要です"}), 400
+
+            ingredients = load_ingredients()
+            ingredients.append({"name": ingredient})
+            save_ingredients(ingredients)
+
+            return jsonify({"message": "材料を追加しました", "ingredients": ingredients})
+
+        elif request.method == "DELETE":
+            data = request.json
+            ingredient_to_delete = data.get("name")
+
+            if not ingredient_to_delete:
+                return jsonify({"error": "削除する材料名が必要です"}), 400
+
+            ingredients = load_ingredients()
+            ingredients = [item for item in ingredients if item["name"] != ingredient_to_delete]
+            save_ingredients(ingredients)
+
+            return jsonify({"message": "材料を削除しました", "ingredients": ingredients})
+
+    except Exception as e:
+        print(f"エラー発生: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+
+# OpenAIを利用して献立を生成するエンドポイント
 @app.route("/generate_menu", methods=["POST"])
 def generate_menu():
     with open(DATA_FILE, "r") as f:
@@ -56,12 +75,20 @@ def generate_menu():
     ingredient_list = ", ".join([item["name"] for item in ingredients])
     prompt = f"以下の材料を使った献立を考えてください: {ingredient_list}"
 
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[{"role": "user", "content": prompt}]
-    )
+    try:
+        # 新しいインターフェースを使用
+        response = openai.Completion.create(
+            model="gpt-3.5-turbo",  # モデルを選択
+            prompt=prompt,           # プロンプトを指定
+            max_tokens=100           # 最大トークン数（オプション）
+        )
 
-    return jsonify({"menu": response["choices"][0]["message"]["content"]})
+        menu = response.choices[0].text.strip()  # レスポンスから結果を取得
 
+        return jsonify({"menu": menu})
+    except Exception as e:
+        return jsonify({"error": "内部エラーが発生しました。"}), 500
+
+# Flaskアプリの起動（デバッグモード）
 if __name__ == "__main__":
     app.run(debug=True)

@@ -107,8 +107,13 @@ def generate_menu():
 
         # 食材リストをカンマ区切りの文字列に変換
         ingredient_list = ", ".join([item["name"] for item in ingredients])
-        # Geminiに渡すプロンプトを作成
-        prompt = f"以下の材料を使った簡単で栄養バランスの良い献立を2つ提案してください: {ingredient_list}"
+        # 改良したプロンプトを作成
+        prompt = (
+            f"あなたは日本の家庭料理に精通したシェフです。以下の材料を使って、簡単で栄養バランスの良い2つの献立を提案してください。"
+            f"各献立には、料理名、簡単な作り方（3～5ステップ）、特徴（味や栄養面）を記載してください。"
+            f"調理時間は20分以内で、日本の家庭で一般的な調味料（醤油、塩、砂糖、油など）を使用してください。"
+            f"材料：{ingredient_list}"
+        )
         print(f"Prompt: {prompt}")
 
         # Gemini APIで献立を生成

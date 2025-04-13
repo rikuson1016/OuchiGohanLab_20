@@ -134,9 +134,9 @@ body {
 
 /* コンテナのスタイル */
 .container {
-  width: 50%;  /* 幅を50%に設定 */
+  width: 150%;  /* 幅を50%に設定 */
   margin: auto;  /* 中央に配置 */
-  padding: 20px;  /* 内側の余白 */
+  padding: 10px;  /* 内側の余白 */
   background: white;  /* 背景色 */
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);  /* 影を追加 */
   border-radius: 10px;  /* 角を丸く */

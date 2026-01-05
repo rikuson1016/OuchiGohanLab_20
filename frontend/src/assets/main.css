@@ -1,35 +1,63 @@
-@import './base.css';
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+/* デフォルトのbodyスタイル */
+/* body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+} */
+
+/* =======================================
+   グローバルスタイル: ポップで料理系な背景
+   ======================================= */
+body {
+    /* ベースカラー：温かみのあるクリームホワイト */
+    background-color: #f7f3e8; 
+    
+    /* タイルの線を表現するためのグラデーション */
+    background-image: repeating-linear-gradient(
+        0deg,
+        #ffffff, /* 白い線 */
+        #ffffff 1px, /* 白い線の幅 */
+        #f7f3e8 1px, /* ベースカラー */
+        #f7f3e8 40px /* タイルの大きさ (40px) */
+    ),
+    repeating-linear-gradient(
+        90deg,
+        #ffffff,
+        #ffffff 1px,
+        #f7f3e8 1px,
+        #f7f3e8 40px
+    );
+    
+    background-size: 40px 40px; /* タイルグリッドのサイズ */
+    background-blend-mode: multiply; /* 模様が重なる部分を自然にブレンド */
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
+/* ルートごとの背景 */
+/* body.home {
+    background-image: url('/ouchi_gohan_lab.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
+body.ingredient-input {
+    background-image: url('/logo.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+body.ingredient-list {
+    background-image: url('/logo.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
+
+body.todays-menu {
+    background-image: url('/logo.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+} */

@@ -1,0 +1,16 @@
+powershellにて
+cd frontend
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+npm run dev
+
+cmdにて
+.\venv\Scripts\activate
+python app.py
+
+10/6
+ユーチューブリンクが消えた　
+お金が全部０円　済
+人数、性別の保存等のコード作成
+
+10/7
+ビジュアルスタジオの再インストールをしたい 済

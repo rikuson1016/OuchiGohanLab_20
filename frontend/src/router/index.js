@@ -1,14 +1,17 @@
+// src/router/index.js
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "../views/Home.vue";
-import IngredientInput from "../components/IngredientInput.vue";
+import Home from "../views/home.vue";
+// import IngredientInput from "../components/IngredientInput.vue";
 import IngredientList from "../components/IngredientList.vue";
 import TodaysMenu from "../components/TodaysMenu.vue";
+import Calendar from "../components/Calendar.vue";
 
 const routes = [
-    { path: "/", name: "Home", component: Home },
-    { path: "/input", name: "IngredientInput", component: IngredientInput },
-    { path: "/list", name: "IngredientList", component: IngredientList },
-    { path: "/today", name: "TodaysMenu", component: TodaysMenu },
+    { path: "/", name: "home", component: Home },
+    // { path: "/input", name: "ingredient-input", component: IngredientInput },
+    { path: "/list", name: "ingredient-list", component: IngredientList },
+    { path: "/today", name: "todays-menu", component: TodaysMenu },
+    { path: "/calendar", name: "calendar", component: Calendar },
 ];
 
 const router = createRouter({

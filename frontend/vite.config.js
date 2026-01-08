@@ -6,6 +6,7 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/OuchiGohanLab_20/', // リポジトリ名をここに入れる
   plugins: [
     vue(),
     vueDevTools(),

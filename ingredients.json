@@ -1,13 +1,13 @@
 [
     {
         "name": "鶏むね肉",
-        "quantity": 500,
+        "quantity": 320,
         "unit": "g",
         "price_per_unit": 1.0
     },
     {
         "name": "玉ねぎ",
-        "quantity": 2,
+        "quantity": 1.5,
         "unit": "個",
         "price_per_unit": 75.0
     },
@@ -16,11 +16,5 @@
         "quantity": 1,
         "unit": "個",
         "price_per_unit": 300.0
-    },
-    {
-        "name": "トマト",
-        "quantity": 1,
-        "unit": "個",
-        "price_per_unit": 70.0
     }
 ]

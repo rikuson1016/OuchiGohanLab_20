@@ -557,5 +557,32 @@
             "youtube_url": "https://www.youtube.com/results?search_query=鶏モモ肉 トマト クリーム煮 作り方 人気"
         },
         "meal_time": "昼"
+    },
+    {
+        "date": "2026-01-11",
+        "dish": {
+            "description": "鶏むね肉、トマト、玉ねぎをオリーブオイルで香ばしくソテーし、ハーブなどで風味付け。仕上げにチーズを乗せて焼くと、ボリューム感のある彩り豊かな洋風おかずになります。",
+            "ingredients_used": [
+                {
+                    "name": "鶏むね肉",
+                    "quantity": 180,
+                    "unit": "g"
+                },
+                {
+                    "name": "トマト",
+                    "quantity": 1,
+                    "unit": "個"
+                },
+                {
+                    "name": "玉ねぎ",
+                    "quantity": 0.5,
+                    "unit": "個"
+                }
+            ],
+            "name": "鶏むね肉とトマトの洋風ソテー",
+            "price": 288,
+            "youtube_url": "https://www.youtube.com/results?search_query=鶏むね肉とトマトの洋風ソテー 作り方 人気"
+        },
+        "meal_time": "昼"
     }
 ]
